@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>大蓬小吃店 - 點餐</title>
+<title>大邁小吃店 - 點餐</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Noto Sans TC',sans-serif; background:#f5f0e8; min-height:100vh; padding-bottom:120px; }
 
-  /* HEADER */
   .header { background:#1a1a1a; color:#fff; padding:14px 16px 12px; }
   .header-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
   .shop-info { font-size:11px; line-height:1.7; color:#ccc; }
@@ -20,33 +19,30 @@
   .shop-name { text-align:center; font-size:28px; font-weight:900; letter-spacing:4px; color:#fff; }
   .shop-sub { text-align:center; font-size:11px; color:#c8a96e; letter-spacing:2px; margin-top:2px; }
 
-  /* SECTION */
-  .section-header { background:#1a1a1a; color:#c8a96e; font-size:15px; font-weight:900; letter-spacing:6px; text-align:center; padding:8px 0; margin-top:10px; }
+  .section-header { background:#1a1a1a; color:#fff; font-size:15px; font-weight:900; letter-spacing:6px; text-align:center; padding:8px 0; margin-top:10px; border-left:4px solid #c8a96e; }
 
-  /* MENU ITEM */
   .menu-item { display:flex; align-items:center; background:#fff; border-bottom:1px solid #ede8de; padding:10px 14px; gap:10px; }
   .item-num { font-size:12px; color:#999; width:20px; flex-shrink:0; text-align:right; }
   .item-name { flex:1; font-size:15px; font-weight:500; color:#1a1a1a; }
+  .item-name small { color:#aaa; font-size:11px; display:block; margin-top:1px; }
   .item-name .spicy { color:#e53e3e; font-size:12px; }
-  .item-note-tag { font-size:11px; color:#e53e3e; font-weight:700; }
+  .item-note-tag { font-size:10px; color:#c8a96e; font-weight:700; border:1px solid #c8a96e; padding:1px 4px; border-radius:3px; margin-left:4px; }
   .item-price { font-size:15px; font-weight:700; color:#c8a96e; width:48px; text-align:right; flex-shrink:0; }
   .item-price::before { content:'$'; font-size:11px; }
 
-  /* QTY */
   .qty-ctrl { display:flex; align-items:center; gap:6px; flex-shrink:0; }
   .qty-btn { width:28px; height:28px; border-radius:50%; border:none; font-size:18px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .1s; }
   .qty-btn:active { transform:scale(.9); }
-  .qty-minus { background:#f0ebe0; color:#666; }
+  .qty-minus { background:#f0ebe0; color:#ccc; }
   .qty-minus.active { background:#1a1a1a; color:#fff; }
   .qty-plus { background:#c8a96e; color:#fff; }
   .qty-num { font-size:16px; font-weight:700; color:#1a1a1a; width:22px; text-align:center; }
 
-  /* NOTE ROW */
   .notes-row { background:#fafaf7; padding:6px 14px 8px 44px; border-bottom:1px solid #ede8de; display:none; }
   .notes-row.show { display:block; }
   .notes-row input { width:100%; border:1px solid #ddd; border-radius:6px; padding:5px 8px; font-size:13px; font-family:inherit; color:#444; background:#fff; outline:none; }
+  .notes-row input:focus { border-color:#c8a96e; }
 
-  /* ORDER BAR */
   .order-bar { position:fixed; bottom:0; left:0; right:0; background:#1a1a1a; padding:10px 16px 16px; box-shadow:0 -4px 20px rgba(0,0,0,.3); z-index:100; }
   .order-bar-inner { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
   .cart-icon { font-size:24px; position:relative; }
@@ -54,16 +50,16 @@
   .total-label { color:#888; font-size:12px; flex:1; }
   .total-amount { color:#c8a96e; font-size:22px; font-weight:900; }
   .total-amount::before { content:'$'; font-size:14px; font-weight:500; }
-  .confirm-btn { width:100%; background:linear-gradient(135deg,#c8a96e,#a07840); color:#fff; border:none; border-radius:10px; padding:13px; font-size:16px; font-weight:900; font-family:inherit; letter-spacing:2px; cursor:pointer; transition:opacity .2s; }
+  .confirm-btn { width:100%; background:linear-gradient(135deg,#c8a96e,#a07840); color:#fff; border:none; border-radius:10px; padding:13px; font-size:16px; font-weight:900; font-family:inherit; letter-spacing:2px; cursor:pointer; }
   .confirm-btn:active { opacity:.9; }
-  .confirm-btn:disabled { background:#555; color:#888; cursor:not-allowed; }
+  .confirm-btn:disabled { background:#333; color:#666; cursor:not-allowed; }
 
-  /* RECEIPT MODAL */
+  /* RECEIPT */
   .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
   .modal-overlay.show { display:flex; }
   .receipt { background:#fff; width:100%; max-width:360px; border-radius:4px; overflow:hidden; font-family:'Courier New','Noto Sans TC',monospace; box-shadow:0 10px 40px rgba(0,0,0,.5); max-height:90vh; overflow-y:auto; }
   .receipt-inner { padding:20px 18px; }
-  .receipt-title { text-align:center; font-size:20px; font-weight:900; letter-spacing:3px; margin-bottom:4px; }
+  .receipt-title { text-align:center; font-size:22px; font-weight:900; letter-spacing:4px; margin-bottom:4px; }
   .receipt-addr { text-align:center; font-size:10px; color:#444; line-height:1.6; }
   .receipt-divider { border:none; border-top:1px dashed #aaa; margin:10px 0; }
   .receipt-meta { display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px; }
@@ -74,15 +70,237 @@
   .receipt-item-note { font-size:10px; color:#777; padding-left:10px; }
   .receipt-total-row { display:flex; justify-content:space-between; padding:6px 0; font-size:18px; font-weight:900; border-top:2px solid #1a1a1a; margin-top:8px; }
   .receipt-section-label { font-size:10px; color:#888; background:#f5f5f5; padding:2px 6px; margin:4px 0 2px; }
-  .receipt-thanks { text-align:center; font-size:13px; margin-top:12px; color:#444; letter-spacing:1px; line-height:1.8; }
-  .close-receipt-btn { display:block; width:calc(100% - 36px); margin:0 18px 18px; background:#1a1a1a; color:#fff; border:none; border-radius:8px; padding:11px; font-size:14px; font-family:inherit; cursor:pointer; font-weight:700; }
+  .receipt-thanks { text-align:center; font-size:12px; margin-top:12px; color:#444; letter-spacing:1px; line-height:2; }
+  .close-receipt-btn { display:block; width:calc(100% - 36px); margin:0 18px 18px; background:#1a1a1a; color:#fff; border:none; border-radius:8px; padding:11px; font-size:14px; font-family:inherit; cursor:pointer; font-weight:700; letter-spacing:1px; }
 
   /* SUCCESS */
-  .success-overlay { position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:400; display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; }
+  .success-overlay { position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:400; display:none; flex-direction:column; align-items:center; justify-content:center; gap:16px; }
   .success-overlay.show { display:flex; }
   .success-icon { font-size:70px; animation:pop .4s ease; }
   .success-msg { color:#fff; font-size:22px; font-weight:900; letter-spacing:2px; }
-  .success-sub { color:#aaa; font-size:14px; text-align:center; line-height:1.8; }
+  .success-sub { color:#aaa; font-size:13px; text-align:center; line-height:2; }
+  @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+  .no-table { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background:#1a1a1a; color:#fff; gap:14px; padding:30px; text-align:center; }
+  .no-table h1 { color:#e53e3e; font-size:22px; }
+  .no-table p { color:#aaa; font-size:14px; line-height:1.8; }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<div class="modal-overlay" id="receiptModal">
+  <div class="receipt">
+    <div class="receipt-inner" id="receiptContent"></div>
+    <button class="close-receipt-btn" onclick="submitOrder()">🖨️ 送出訂單 · Gửi Đơn Hàng</button>
+  </div>
+</div>
+
+<div class="success-overlay" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <div class="success-msg">訂單已送出！</div>
+  <div class="success-sub">Đơn hàng đã gửi đến bếp!<br>廚房已收到您的訂單<br><br>請稍候，我們將盡快為您準備<br>Xin vui lòng chờ đợi ạ 🙏</div>
+</div>
+
+<script>
+const MENU = [
+  { section:"主 食", vi:"Món Chính", items:[
+    {id:1, name:"米粉湯",    vi:"Súp bún gạo",          price:40},
+    {id:2, name:"魯肉飯",    vi:"Cơm thịt kho",         price:40},
+    {id:3, name:"乾麵",      vi:"Mì khô",               price:50},
+    {id:4, name:"赤肉羹飯",  vi:"Cơm súp thịt đỏ",     price:85},
+    {id:5, name:"赤肉羹麵",  vi:"Mì súp thịt đỏ",      price:85},
+    {id:6, name:"赤肉羹湯",  vi:"Súp thịt đỏ",         price:70},
+  ]},
+  { section:"經典招牌", vi:"Đặc Sản", items:[
+    {id:7,  name:"古早味紅燒肉", vi:"Thịt kho kiểu xưa",    price:70},
+    {id:8,  name:"椒麻魚條",     vi:"Cá phi lê tiêu tê",    price:70, spicy:1},
+    {id:9,  name:"泰式皮蛋",     vi:"Trứng bắc thảo Thái",  price:55, spicy:1},
+    {id:10, name:"叢林雞",       vi:"Gà rừng cay",          price:120, spicy:2},
+    {id:11, name:"油雞",         vi:"Gà dầu",               price:120},
+  ]},
+  { section:"小 菜", vi:"Món Phụ", items:[
+    {id:12, name:"炸豬肝",   vi:"Gan heo chiên",        price:65},
+    {id:13, name:"炸蝦仁",   vi:"Tôm chiên",            price:70},
+    {id:14, name:"炸蚵仔",   vi:"Hàu chiên",            price:75},
+    {id:15, name:"炸花枝",   vi:"Mực chiên",            price:70},
+    {id:16, name:"炸豆腐",   vi:"Đậu hũ chiên",        price:25},
+    {id:17, name:"炸甜不辣", vi:"Chả cá chiên",         price:45},
+    {id:18, name:"炸四季豆", vi:"Đậu que chiên",        price:50},
+    {id:19, name:"炸蝦捲",   vi:"Chả tôm chiên",        price:65},
+    {id:20, name:"大腸",     vi:"Ruột già",             price:70},
+    {id:21, name:"燙青菜",   vi:"Rau luộc",             price:45},
+    {id:22, name:"油豆腐",   vi:"Đậu hũ dầu",          price:25, note:"每日限量"},
+  ]}
+];
+
+const params = new URLSearchParams(location.search);
+const tableParam = params.get('table');
+const VALID_TABLES = [1,2,3,4,5,6,7,8,9,10];
+const selectedTable = VALID_TABLES.includes(Number(tableParam)) ? Number(tableParam) : null;
+
+let cart = {}, notes = {};
+
+function init() {
+  if (!selectedTable) {
+    document.getElementById('root').innerHTML = `
+      <div class="no-table">
+        <div style="font-size:50px">⚠️</div>
+        <h1>找不到桌號</h1>
+        <p>Vui lòng quét lại mã QR trên bàn<br>請重新掃描桌上的QR碼</p>
+      </div>`;
+    return;
+  }
+  document.title = `大邁小吃店 · 桌 ${selectedTable}`;
+  buildPage();
+}
+
+function buildPage() {
+  document.getElementById('root').innerHTML = `
+    <div class="header">
+      <div class="header-top">
+        <div class="shop-info">
+          <strong>📍 新北市中和區信義街23號</strong><br>
+          📞 0968-174-559
+        </div>
+        <div class="table-badge">
+          <div class="label">桌號 Bàn</div>
+          <div class="num">${selectedTable}</div>
+        </div>
+      </div>
+      <div class="shop-name">大邁小吃店</div>
+      <div class="shop-sub">內用點餐 · Gọi Món Tại Bàn</div>
+    </div>
+    <div id="menuContainer"></div>
+    <div class="order-bar">
+      <div class="order-bar-inner">
+        <div class="cart-icon">🛒<span class="cart-badge" id="cartCount">0</span></div>
+        <div class="total-label">合計金額 · Tổng tiền</div>
+        <div class="total-amount" id="totalAmount">0</div>
+      </div>
+      <button class="confirm-btn" id="confirmBtn" onclick="showReceipt()" disabled>
+        ✅ 確認點餐 · Hoàn Tất Đặt Món
+      </button>
+    </div>`;
+  buildMenu();
+}
+
+function buildMenu() {
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+  MENU.forEach(section => {
+    const hdr = document.createElement('div');
+    hdr.className = 'section-header';
+    hdr.innerHTML = `${section.section} <span style="font-size:10px;color:#c8a96e;letter-spacing:1px;font-weight:400">· ${section.vi}</span>`;
+    container.appendChild(hdr);
+    section.items.forEach(item => {
+      const spicy = item.spicy ? `<span class="spicy">${'🌶'.repeat(item.spicy)}</span>` : '';
+      const noteTag = item.note ? `<span class="item-note-tag">${item.note}</span>` : '';
+      const row = document.createElement('div');
+      row.className = 'menu-item';
+      row.innerHTML = `
+        <span class="item-num">${item.id}</span>
+        <span class="item-name">${item.name}${spicy}${noteTag}<small>${item.vi}</small></span>
+        <span class="item-price">${item.price}</span>
+        <div class="qty-ctrl">
+          <button class="qty-btn qty-minus" onclick="changeQty(${item.id},${item.price},-1)" id="minus_${item.id}">−</button>
+          <span class="qty-num" id="qty_${item.id}">0</span>
+          <button class="qty-btn qty-plus" onclick="changeQty(${item.id},${item.price},1)">＋</button>
+        </div>`;
+      container.appendChild(row);
+      const noteRow = document.createElement('div');
+      noteRow.className = 'notes-row';
+      noteRow.id = `note_row_${item.id}`;
+      noteRow.innerHTML = `<input type="text" placeholder="備註 · Ghi chú (tuỳ chọn)" id="note_input_${item.id}" oninput="saveNote(${item.id})" />`;
+      container.appendChild(noteRow);
+    });
+  });
+}
+
+function changeQty(id, price, delta) {
+  const cur = cart[id]?.qty || 0;
+  const next = Math.max(0, cur + delta);
+  if (next === 0) delete cart[id]; else cart[id] = {qty:next, price};
+  document.getElementById(`qty_${id}`).textContent = next;
+  document.getElementById(`minus_${id}`).classList.toggle('active', next > 0);
+  document.getElementById(`note_row_${id}`).classList.toggle('show', next > 0);
+  updateTotal();
+}
+
+function saveNote(id) { notes[id] = document.getElementById(`note_input_${id}`).value; }
+
+function updateTotal() {
+  let total = 0, count = 0;
+  Object.values(cart).forEach(v => { total += v.qty * v.price; count += v.qty; });
+  document.getElementById('totalAmount').textContent = total;
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('confirmBtn').disabled = count === 0;
+}
+
+function getItem(id) { for(const s of MENU) for(const it of s.items) if(it.id===id) return it; }
+
+function showReceipt() {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+  const dateStr = now.toLocaleDateString('zh-TW');
+  let itemsHtml = '', total = 0;
+  MENU.forEach(section => {
+    const si = section.items.filter(it => cart[it.id]);
+    if (!si.length) return;
+    itemsHtml += `<div class="receipt-section-label">── ${section.section} ──</div>`;
+    si.forEach(it => {
+      const qty = cart[it.id].qty, sub = qty * it.price;
+      total += sub;
+      itemsHtml += `<div>
+        <div class="receipt-item-row">
+          <span class="receipt-item-name">${it.id}. ${it.name}</span>
+          <span class="receipt-item-qty">x${qty}</span>
+          <span class="receipt-item-price">$${sub}</span>
+        </div>
+        ${notes[it.id] ? `<div class="receipt-item-note">📝 ${notes[it.id]}</div>` : ''}
+      </div>`;
+    });
+  });
+  document.getElementById('receiptContent').innerHTML = `
+    <div class="receipt-title">大邁小吃店</div>
+    <div class="receipt-addr">新北市中和區信義街23號<br>☎ 0968-174-559</div>
+    <hr class="receipt-divider">
+    <div class="receipt-meta"><span>桌號 Bàn：${selectedTable}</span><span>${dateStr} ${timeStr}</span></div>
+    <hr class="receipt-divider">
+    ${itemsHtml}
+    <div class="receipt-total-row"><span>合計金額</span><span>$${total}</span></div>
+    <div class="receipt-thanks">══════════════<br>感謝您的光臨！<br>Cảm ơn Quý Khách 🙏<br>══════════════</div>`;
+  document.getElementById('receiptModal').classList.add('show');
+}
+
+function submitOrder() {
+  const order = {
+    table: selectedTable,
+    time: new Date().toISOString(),
+    items: Object.keys(cart).map(id => {
+      const it = getItem(Number(id));
+      return {id:Number(id), name:it.name, qty:cart[id].qty, price:cart[id].price, note:notes[id]||''};
+    }),
+    total: Object.values(cart).reduce((s,v) => s+v.qty*v.price, 0)
+  };
+  const existing = JSON.parse(localStorage.getItem('damai_orders')||'[]');
+  existing.push(order);
+  localStorage.setItem('damai_orders', JSON.stringify(existing));
+  document.getElementById('receiptModal').classList.remove('show');
+  document.getElementById('successScreen').classList.add('show');
+  setTimeout(() => {
+    document.getElementById('successScreen').classList.remove('show');
+    cart = {}; notes = {};
+    buildMenu(); updateTotal();
+  }, 3500);
+}
+
+init();
+</script>
+</body>
+</html>
+.success-sub { color:#aaa; font-size:14px; text-align:center; line-height:1.8; }
   @keyframes pop { 0%{transform:scale(0)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
 
   /* NO TABLE */
